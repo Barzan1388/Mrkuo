@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        .slide-up {
+            animation: slide-up 0.5s;
+        }
+
+        @keyframes slide-up {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="countdown"></h1>
+
+    <script>
+        // Countdown date
+        const countDownDate = new Date('May 30, 2022 00:00:00').getTime();
+
+        // Update countdown function
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const countdownElement = document.getElementById('countdown');
+
+            if (distance < 0) {
+                countdownElement.innerHTML = "EXPIRED";
+            } else {
+                countdownElement.innerHTML =
+                    ${days}d ${hours}h ${minutes}m ${seconds}s;
+            }
+
+            // Add slide-up animation
+            countdownElement.classList.add('slide-up');
+            setTimeout(() => {
+                countdownElement.classList.remove('slide-up');
+            }, 500);
+
+            // Save countdown data to localStorage
+            localStorage.setItem('countdown', JSON.stringify({
+                days: days,
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds
+            }));
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+    </script>
+</body>
+</html>
